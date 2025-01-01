@@ -1,0 +1,32 @@
+version: "3.1"
+services:
+  db:
+    image: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+
+  redis:
+    image: "redis:alpine"
+
+    command: redis-server --requirepass sOmE_sEcUrE_pAsS
+
+    ports:
+      - "6379:6379"
+
+    volumes:
+      - redis_data:/data
+    restart: always
+    environment:
+      - REDIS_REPLICATION_MODE=master
+    networks:
+      connect:
+networks:
+  connect:
+      driver: bridge
+volumes:
+  db_data:
+  redis_data:

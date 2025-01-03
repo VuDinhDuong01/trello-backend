@@ -5,10 +5,14 @@ import java.util.UUID;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.MappedSuperclass;
+import lombok.AccessLevel;
 import lombok.Data;
+import lombok.experimental.FieldDefaults;
 
-@Entity
 @Data
+@MappedSuperclass
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class BaseEntity {
 
     @Column(name = "is_delete")

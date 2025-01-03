@@ -2,10 +2,10 @@ package com.example.trello.Service;
 
 import java.util.concurrent.TimeUnit;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
-import jakarta.persistence.criteria.CriteriaBuilder.In;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -17,7 +17,8 @@ public class RedisService {
 
     final Integer DURATION_TIME = 5;
 
-    RedisTemplate template;
+    @Autowired
+    final RedisTemplate template;
 
     public void saveValueToRedis(String key, Object value) {
         template.opsForValue().set(key, value, DURATION_TIME, TimeUnit.MINUTES);

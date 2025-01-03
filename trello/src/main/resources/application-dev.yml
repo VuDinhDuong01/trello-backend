@@ -1,19 +1,22 @@
+server:
+    port: 5000
 spring:
     datasource:
-        url: jdbc:mysql://localhost:3306/trello
+        url: jdbc:mysql://localhost:3306/trello?allowPublicKeyRetrieval=true&useSSL=false
         password: root  
         username: root
     jpa:
         hibernate:            
             database-platform: org.hibernate.dialect.H2Dialect
-            #show-sql: true
-            #ddl-auto: create-drop
+            show-sql: true
+            ddl-auto: update
     redis:
         host: localhost
-        port=6379
+        port: 6379
     mail:
         host: smtp.gmail.com
         port: 587
         fromEmail: duong2lophot@gmail.com
         password:  adfadfdfd
+
 

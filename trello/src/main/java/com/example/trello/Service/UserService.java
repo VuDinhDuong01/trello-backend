@@ -18,6 +18,7 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RequiredArgsConstructor
 public class UserService {
+
     UserRepository userRepository;
     RedisService redisService;
     EmailService emailService;
@@ -30,7 +31,7 @@ public class UserService {
         String subject = "";
         String token = Util.randomToken();
         redisService.saveValueToRedis(payload.getEmail() + "_register", token);
-        emailService.sendNewMail(payload.getEmail(), subject, token);
+        // emailService.sendNewMail(payload.getEmail(), subject, token);
 
         UserResponse.VerifyEmail verifyEmail = new UserResponse.VerifyEmail();
         verifyEmail.setEmail(user.getEmail());

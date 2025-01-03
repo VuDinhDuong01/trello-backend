@@ -26,7 +26,6 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class UserController {
 
-    
     UserService userService;
 
     @PostMapping("/verify-email")
@@ -48,6 +47,19 @@ public class UserController {
         try {
             UserResponse.VerifyToken response = userService.VerifyToken(body);
             result = BaseResponse.<UserResponse.VerifyToken>builder().data(response).build();
+        } catch (Exception e) {
+            throw new ServerErrorException("Server error");
+        }
+        return result;
+    }
+
+    @PostMapping("/send-token")
+    public BaseResponse<String> SendToken(@RequestBody @Valid UserRequest.SendToken body) {
+        BaseResponse<String> result = null;
+
+        try {
+           String response = userService.SendToken(body);
+            result = BaseResponse.<String>builder().data(response).build();
         } catch (Exception e) {
             throw new ServerErrorException("Server error");
         }

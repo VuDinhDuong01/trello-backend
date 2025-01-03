@@ -18,5 +18,10 @@ spring:
         port: 587
         fromEmail: duong2lophot@gmail.com
         password:  adfadfdfd
+    minio:
+        url: http://127.0.0.1:9000
+        access-key: your-access-key
+        secret-key: your-secret-key
+        bucket-name: testbucket
 
 

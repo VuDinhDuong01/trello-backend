@@ -30,5 +30,10 @@ public class UserRequest {
         String password;
     }
 
+    @Getter
+    public static class SendToken{
+        String email;
+    }
+
     
 }

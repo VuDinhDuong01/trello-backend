@@ -25,7 +25,7 @@ public class UserService {
 
     public UserResponse.VerifyEmail VerifyEmail(UserRequest.VerifyEmail payload) {
         UserEntity user = userRepository.findByEmail(payload.getEmail());
-        if (user == null) {
+        if (user != null) {
             throw new ForbiddenErrorException("user not exist");
         }
         String subject = "";
@@ -34,31 +34,49 @@ public class UserService {
         // emailService.sendNewMail(payload.getEmail(), subject, token);
 
         UserResponse.VerifyEmail verifyEmail = new UserResponse.VerifyEmail();
-        verifyEmail.setEmail(user.getEmail());
+        UserEntity userEntity = new UserEntity();
+        userEntity.setEmail(payload.getEmail());
+        userRepository.save(userEntity);
+
+        verifyEmail.setEmail(payload.getEmail());
         return verifyEmail;
     }
 
     public UserResponse.VerifyToken VerifyToken(UserRequest.VerifyToken payload) {
+
         UserEntity user = userRepository.findByEmail(payload.getEmail());
         if (user == null) {
             throw new ForbiddenErrorException("user not exist");
         }
 
         Object token = redisService.getValueFromRedis(payload.getEmail() + "_register");
+        System.out.println("token:" + token);
+
         if (token == null) {
             throw new ForbiddenErrorException("Token đã hết hạn");
         }
 
-        if (token != payload.getToken()) {
+        if (!token.equals(payload.getToken())) {
             throw new ForbiddenErrorException("Token bạn nhập chưa đúng");
         }
 
         redisService.deleteValue(payload.getEmail() + "_register");
-
         UserResponse.VerifyToken verifyToken = new UserResponse.VerifyToken();
         verifyToken.setEmail(payload.getEmail());
 
         return verifyToken;
+    }
+
+    public String SendToken(UserRequest.SendToken payload) {
+        UserEntity user = userRepository.findByEmail(payload.getEmail());
+        if (user == null) {
+            throw new ForbiddenErrorException("Bạn chưa verify tài khoản");
+        }
+        String token = Util.randomToken();
+        redisService.saveValueToRedis(payload.getEmail() + "_register", token);
+        // emailService.sendNewMail(payload.getEmail(), subject, token);
+
+        return "Token đã được giửi về gmail.";
     }
 
     public UserResponse.Register register(UserRequest.Register payload) {
@@ -70,6 +88,7 @@ public class UserService {
         UserEntity userEntity = new UserEntity();
         userEntity.setEmail(payload.getEmail());
         userEntity.setCreatedAt(new Date());
+        userEntity.setIsActive(true);
         userEntity.setCreatedBy(null);
         userEntity.setIsActive(true);
 
@@ -80,15 +99,14 @@ public class UserService {
         return register;
     }
 
-
-    public  UserEntity login(UserRequest.Login payload){
+    public UserEntity login(UserRequest.Login payload) {
 
         UserEntity user = userRepository.findByEmail(payload.getEmail());
         if (user == null) {
             throw new ForbiddenErrorException("user not exist");
         }
 
-        if(user.getPassword() != payload.getPassword()){
+        if (user.getPassword() != payload.getPassword()) {
             throw new ForbiddenErrorException("password not correct");
         }
 

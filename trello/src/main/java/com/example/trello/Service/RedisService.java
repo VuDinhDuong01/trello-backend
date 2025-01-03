@@ -1,6 +1,6 @@
 package com.example.trello.Service;
 
-import java.util.concurrent.TimeUnit;
+import java.time.Duration;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -20,11 +20,13 @@ public class RedisService {
     @Autowired
     final RedisTemplate template;
 
-    public void saveValueToRedis(String key, Object value) {
-        template.opsForValue().set(key, value, DURATION_TIME, TimeUnit.MINUTES);
+    public void saveValueToRedis(String key, String value) {
+        template.opsForValue().set(key, value, Duration.ofSeconds(200000));
+    
     }
 
     public Object getValueFromRedis(String key) {
+       
         return template.opsForValue().get(key);
     }
 

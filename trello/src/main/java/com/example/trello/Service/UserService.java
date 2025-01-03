@@ -26,7 +26,7 @@ public class UserService {
     public UserResponse.VerifyEmail VerifyEmail(UserRequest.VerifyEmail payload) {
         UserEntity user = userRepository.findByEmail(payload.getEmail());
         if (user != null) {
-            throw new ForbiddenErrorException("user not exist");
+            throw new ForbiddenErrorException("user existed");
         }
         String subject = "";
         String token = Util.randomToken();

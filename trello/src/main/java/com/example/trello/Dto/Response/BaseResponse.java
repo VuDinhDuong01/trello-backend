@@ -10,15 +10,18 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class BaseResponse<T> {
     T data;
-    
+
     @Builder.Default
     Boolean success = true;
 
     @Builder.Default
-    Error error = null;
+    ErrorResponses error = null;
 
-    public static class Error{
+    @Builder
+    @Data
+    public static class ErrorResponses {
         Integer code;
         String message;
     }
+
 }

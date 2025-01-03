@@ -30,13 +30,13 @@ public class UserController {
 
     @PostMapping("/verify-email")
     public BaseResponse<UserResponse.VerifyEmail> VerifyEmail(@RequestBody @Valid UserRequest.VerifyEmail body) {
-        BaseResponse<UserResponse.VerifyEmail> result = null;
-        try {
+        // BaseResponse<UserResponse.VerifyEmail> result = null;
+        // try {
             UserResponse.VerifyEmail response = userService.VerifyEmail(body);
-            result = BaseResponse.<UserResponse.VerifyEmail>builder().data(response).build();
-        } catch (Exception e) {
-            throw new ServerErrorException("Server error");
-        }
+            BaseResponse<UserResponse.VerifyEmail>  result = BaseResponse.<UserResponse.VerifyEmail>builder().data(response).build();
+        // } catch (Exception e) {
+        //     throw new ServerErrorException("Server error");
+        // }
         return result;
     }
 

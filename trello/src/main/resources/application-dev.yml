@@ -7,9 +7,9 @@ spring:
         username: root
     jpa:
         hibernate:            
-            database-platform: org.hibernate.dialect.H2Dialect
             show-sql: true
             ddl-auto: update
+            dialect: org.hibernate.dialect.MySQLDialect
     redis:
         host: localhost
         port: 6379
@@ -17,11 +17,14 @@ spring:
         host: smtp.gmail.com
         port: 587
         fromEmail: duong2lophot@gmail.com
-        password:  adfadfdfd
+        password:  tabwgkozmwgvvzu
     minio:
         url: http://127.0.0.1:9000
         access-key: your-access-key
         secret-key: your-secret-key
         bucket-name: testbucket
+    jwt:
+        secretKey_access_token: Gd7Jf9vZsPiZhvQ5l3X8mYvR6P8jTv1L2xQ6jYuTzWvR5dMfH2k7gQ==
+        secretKey_refresh_token: Gd8Jf9vZsPiZhvQ5l3X8mYvR6P8jTv1L2xQ6jYuTzWvR5dMfH2k7gQ==
 
 

@@ -31,7 +31,7 @@ public class UserService {
         String subject = "";
         String token = Util.randomToken();
         redisService.saveValueToRedis(payload.getEmail() + "_register", token);
-        // emailService.sendNewMail(payload.getEmail(), subject, token);
+        emailService.sendNewMail(payload.getEmail(), subject, token);
 
         UserResponse.VerifyEmail verifyEmail = new UserResponse.VerifyEmail();
         UserEntity userEntity = new UserEntity();

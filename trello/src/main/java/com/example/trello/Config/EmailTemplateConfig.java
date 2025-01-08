@@ -18,7 +18,7 @@ public class EmailTemplateConfig {
     @Value("${spring.mail.fromEmail}")
     String fromEmail;
 
-    @Value("${pring.mail.password}")
+    @Value("${spring.mail.password}")
     String password;
 
     @Bean

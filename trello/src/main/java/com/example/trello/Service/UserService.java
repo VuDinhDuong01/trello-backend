@@ -1,6 +1,11 @@
 package com.example.trello.Service;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.example.trello.Dto.Request.UserRequest;
@@ -18,15 +23,22 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RequiredArgsConstructor
 public class UserService {
+    @Value("${spring.jwt.secretKey_access_token}")
+    String secret_access_key;
+
+    @Value("${spring.jwt.secretKey_refresh_token}")
+    String secret_refresh_key;
 
     UserRepository userRepository;
     RedisService redisService;
     EmailService emailService;
+    PasswordEncoder passwordEncoder;
+    JwtService jwtService;
 
     public UserResponse.VerifyEmail VerifyEmail(UserRequest.VerifyEmail payload) {
         UserEntity user = userRepository.findByEmail(payload.getEmail());
         if (user != null) {
-            throw new ForbiddenErrorException("user existed");
+            throw new ForbiddenErrorException("user not existed");
         }
         String subject = "";
         String token = Util.randomToken();
@@ -46,7 +58,7 @@ public class UserService {
 
         UserEntity user = userRepository.findByEmail(payload.getEmail());
         if (user == null) {
-            throw new ForbiddenErrorException("user not exist");
+            throw new ForbiddenErrorException("user not existed");
         }
 
         Object token = redisService.getValueFromRedis(payload.getEmail() + "_register");
@@ -72,11 +84,13 @@ public class UserService {
         if (user == null) {
             throw new ForbiddenErrorException("Bạn chưa verify tài khoản");
         }
+
+        String subject = "";
         String token = Util.randomToken();
         redisService.saveValueToRedis(payload.getEmail() + "_register", token);
-        // emailService.sendNewMail(payload.getEmail(), subject, token);
+        emailService.sendNewMail(payload.getEmail(), subject, token);
 
-        return "Token đã được giửi về gmail.";
+        return "Token đã được giửi về gmail của bạn.";
     }
 
     public UserResponse.Register register(UserRequest.Register payload) {
@@ -84,32 +98,45 @@ public class UserService {
         if (user == null) {
             throw new ForbiddenErrorException("user not exist");
         }
+        user.setEmail(payload.getEmail());
+        user.setCreatedAt(new Date());
+        user.setIsActive(true);
+        user.setCreatedBy(null);
+        user.setIsActive(true);
+        user.setPassword(passwordEncoder.encode(payload.getPassword()));
 
-        UserEntity userEntity = new UserEntity();
-        userEntity.setEmail(payload.getEmail());
-        userEntity.setCreatedAt(new Date());
-        userEntity.setIsActive(true);
-        userEntity.setCreatedBy(null);
-        userEntity.setIsActive(true);
-
-        userRepository.save(userEntity);
+        userRepository.save(user);
 
         UserResponse.Register register = new UserResponse.Register();
         register.setMessage("register success");
         return register;
     }
 
-    public UserEntity login(UserRequest.Login payload) {
+    public Map<String, Object> login(UserRequest.Login payload) {
 
         UserEntity user = userRepository.findByEmail(payload.getEmail());
         if (user == null) {
             throw new ForbiddenErrorException("user not exist");
         }
 
-        if (user.getPassword() != payload.getPassword()) {
+        Boolean decoderPassword = passwordEncoder.matches(payload.getPassword(), user.getPassword());
+
+        if (!decoderPassword) {
             throw new ForbiddenErrorException("password not correct");
         }
 
-        return user;
+        String accessToken = jwtService.generateToken(user.getId().toString(), secret_access_key);
+        String refreshToken = jwtService.generateToken(user.getId().toString(), secret_refresh_key);
+
+        Map<String, Object> response = new HashMap<>();
+        
+        UserResponse.Token token = new UserResponse.Token();
+        token.setAccessToken(accessToken);
+        token.setRefreshToken(refreshToken);
+
+        response.put("record", user);
+        response.put("token",token);
+        
+        return response;
     }
 }

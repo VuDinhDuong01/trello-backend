@@ -1,5 +1,7 @@
 package com.example.trello.Controller;
 
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -42,14 +44,14 @@ public class UserController {
 
     @PostMapping("/verify-token")
     public BaseResponse<UserResponse.VerifyToken> VerifyToken(@RequestBody @Valid UserRequest.VerifyToken body) {
-        BaseResponse<UserResponse.VerifyToken> result = null;
+        // BaseResponse<UserResponse.VerifyToken> result = null;
 
-        try {
+        // try {
             UserResponse.VerifyToken response = userService.VerifyToken(body);
-            result = BaseResponse.<UserResponse.VerifyToken>builder().data(response).build();
-        } catch (Exception e) {
-            throw new ServerErrorException("Server error");
-        }
+            BaseResponse<UserResponse.VerifyToken> result = BaseResponse.<UserResponse.VerifyToken>builder().data(response).build();
+        // } catch (Exception e) {
+        //     throw new ServerErrorException("Server error");
+        // }
         return result;
     }
 
@@ -82,16 +84,10 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public BaseResponse<UserEntity> login(@RequestBody @Valid UserRequest.Login body) {
-        BaseResponse<UserEntity> result = null;
-
-        try {
-            UserEntity response = userService.login(body);
-            result = BaseResponse.<UserEntity>builder().data(response).build();
-        } catch (Exception e) {
-            throw new ServerErrorException("Server error");
-        }
-
+    public BaseResponse<Map<String, Object>> login(@RequestBody @Valid UserRequest.Login body) {
+            Map<String, Object> response = userService.login(body);
+            BaseResponse<Map<String, Object>>  result = BaseResponse.<Map<String, Object>>builder().data(response).build();
+        
         return result;
     }
 }

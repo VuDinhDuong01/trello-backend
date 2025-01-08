@@ -26,4 +26,10 @@ public class UserResponse {
     public static class Login{
         UserEntity user;
     }
+
+    @Data
+    public static class Token{
+        String accessToken;
+        String refreshToken;
+    }
 }

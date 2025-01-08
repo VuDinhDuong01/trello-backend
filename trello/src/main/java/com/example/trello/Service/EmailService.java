@@ -12,7 +12,6 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RequiredArgsConstructor
 public class EmailService {
-
     JavaMailSender mailSender;
 
     public void sendNewMail(String to, String subject, String body) {

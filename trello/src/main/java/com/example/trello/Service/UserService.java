@@ -49,7 +49,6 @@ public class UserService {
         String token = Util.randomToken();
         redisService.saveValueToRedis(payload.getEmail() + "_register", token);
         Object tokenRedis = redisService.getValueFromRedis(payload.getEmail() + "_register");
-        System.out.println("tokenRedis:" + tokenRedis);
         // emailService.sendNewMail(payload.getEmail(), subject, token);
 
         UserResponse.VerifyEmail verifyEmail = new UserResponse.VerifyEmail();
@@ -97,7 +96,7 @@ public class UserService {
         redisService.saveValueToRedis(payload.getEmail() + "_register", token);
         Object tokenRedis = redisService.getValueFromRedis(payload.getEmail() + "_register");
         System.out.println("tokenRedis:" + tokenRedis);
-        // emailService.sendNewMail(payload.getEmail(), subject, token);
+        emailService.sendNewMail(payload.getEmail(), subject, token);
 
         return "Token đã được giửi về gmail của bạn.";
     }

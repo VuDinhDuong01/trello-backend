@@ -5,7 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
 
-@Data@Builder
+@Data
+@Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class BaseResponse<T> {
     T data;

@@ -37,7 +37,7 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        String[] PUBLIC_ROUTER = { "/api/v1/verify-otp", "/api/v1/login", "/api/v1/verify-email", "/api/v1/register" };
+        String[] PUBLIC_ROUTER = { "/api/v1/verify-token", "/api/v1/login", "/api/v1/verify-email", "/api/v1/register" ,"api/v1/send-token"};
         http.cors().disable()
                 .csrf().disable().authorizeHttpRequests((requests) -> requests
                         .requestMatchers(HttpMethod.POST, PUBLIC_ROUTER).permitAll()

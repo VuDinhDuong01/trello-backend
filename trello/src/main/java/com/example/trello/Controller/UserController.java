@@ -14,6 +14,7 @@ import com.example.trello.Dto.Response.BaseResponse;
 import com.example.trello.Dto.Response.UserResponse;
 import com.example.trello.Exception.ServerErrorException;
 import com.example.trello.Service.UserService;
+import com.example.trello.Util.CustomValidation.ModuleDescriptionApi;
 
 import jakarta.validation.Valid;
 import lombok.AccessLevel;
@@ -28,6 +29,7 @@ import lombok.experimental.FieldDefaults;
 public class UserController {
     UserService userService;
 
+    @ModuleDescriptionApi(module = "user", method = "POST", description = "Xác thực email", name = "Xác thực email của user trước khi đăng ký tài khoản", path = "/api/v1/verify-email", matadataAdmin = false, type = "PUBLIC")
     @PostMapping("/verify-email")
     public BaseResponse<UserResponse.VerifyEmail> VerifyEmail(@RequestBody @Valid UserRequest.VerifyEmail body) {
         // BaseResponse<UserResponse.VerifyEmail> result = null;
@@ -41,6 +43,7 @@ public class UserController {
         return result;
     }
 
+    @ModuleDescriptionApi(module = "user", description = "Xác thực token", method = "POST", name = "Xác thực mã giửi vể email", path = "/api/v1/verify-token", matadataAdmin = false, type = "PUBLIC")
     @PostMapping("/verify-token")
     public BaseResponse<UserResponse.VerifyToken> VerifyToken(@RequestBody @Valid UserRequest.VerifyToken body) {
         // BaseResponse<UserResponse.VerifyToken> result = null;
@@ -55,6 +58,7 @@ public class UserController {
         return result;
     }
 
+    @ModuleDescriptionApi(module = "user", method = "POST", description = "Gửi lại mã token", name = "", path = "/api/v1/send-token", matadataAdmin = false, type = "PUBLIC")
     @PostMapping("/send-token")
     public BaseResponse<String> SendToken(@RequestBody @Valid UserRequest.SendToken body) {
         String response = userService.SendToken(body);
@@ -62,20 +66,22 @@ public class UserController {
         return result;
     }
 
+    @ModuleDescriptionApi(module = "user", method = "POST", description = "Đăng ký", name = "Đăng ký tài khoản", path = "/api/v1/register", matadataAdmin = false, type = "PUBLIC")
     @PostMapping("/register")
     public BaseResponse<UserResponse.Register> register(@RequestBody @Valid UserRequest.Register body) {
-       
 
-        
-            UserResponse.Register response = userService.register(body);
-            BaseResponse<UserResponse.Register> result = BaseResponse.<UserResponse.Register>builder().data(response).build();
-    return result;
+        UserResponse.Register response = userService.register(body);
+        BaseResponse<UserResponse.Register> result = BaseResponse.<UserResponse.Register>builder().data(response)
+                .build();
+        return result;
     }
 
+    @ModuleDescriptionApi(module = "user", description = "Đăng nhập", method = "POST", name = "Đăng ký tài khoản", path = "/api/v1/login", matadataAdmin = false, type = "PUBLIC")
     @PostMapping("/login")
     public BaseResponse<Map<String, Object>> login(@RequestBody @Valid UserRequest.Login body) {
         Map<String, Object> response = userService.login(body);
         BaseResponse<Map<String, Object>> result = BaseResponse.<Map<String, Object>>builder().data(response).build();
         return result;
     }
+
 }

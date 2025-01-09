@@ -2,8 +2,9 @@ package com.example.trello.Controller;
 
 import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.trello.Dto.Request.UserRequest;
 import com.example.trello.Dto.Response.BaseResponse;
 import com.example.trello.Dto.Response.UserResponse;
-import com.example.trello.Exception.ServerErrorException;
+import com.example.trello.Entity.UserEntity;
 import com.example.trello.Service.UserService;
 import com.example.trello.Util.CustomValidation.ModuleDescriptionApi;
 
@@ -84,4 +85,19 @@ public class UserController {
         return result;
     }
 
+    @ModuleDescriptionApi(module = "user", description = "lấy thông tin cá nhân", method = "GET", name = "", path = "/api/v1/me", matadataAdmin = false, type = "PRIVATE")
+    @GetMapping("/me")
+    public BaseResponse<UserEntity> getMe() {
+        UserEntity response = userService.getMe();
+        BaseResponse<UserEntity> result = BaseResponse.<UserEntity>builder().data(response).build();
+        return result;
+    }
+
+    @ModuleDescriptionApi(module = "user", description = "lấy thông tin cá nhân", method = "GET", name = "", path = "/api/v1/me", matadataAdmin = false, type = "PRIVATE")
+    @PatchMapping("/me")
+    public BaseResponse<UserEntity> updateMe(@RequestBody @Valid UserRequest.UpdateMe body){
+        UserEntity response =  userService.updateMe(body);
+        BaseResponse<UserEntity> result = BaseResponse.<UserEntity>builder().data(response).build();
+        return result;
+    }
 }

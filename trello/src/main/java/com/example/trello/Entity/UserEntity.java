@@ -31,5 +31,7 @@ public class UserEntity extends BaseEntity{
     @Column(name = "is_active")
     Boolean isActive=false;
 
+    String username;
+
     List<String> roles = new ArrayList<String>(List.of("USER"));
 }

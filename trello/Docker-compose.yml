@@ -1,5 +1,6 @@
 version: "3.1"
 services:
+
   db:
     image: mysql
     environment:
@@ -30,6 +31,22 @@ services:
     networks:
       - connect
 
+  minio:
+    image: minio/minio
+    container_name: minio
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - minio_data:/data
+    networks:
+      - connect
+    environment:
+      MINIO_ROOT_USER: admin
+      MINIO_ROOT_PASSWORD: 123456aA@
+    command: server /data --console-address ":9001"
+
+
 networks:
   connect:
       driver: bridge
@@ -38,3 +55,4 @@ volumes:
   db_data:
   redis_data:
   redis-insight:
+  minio_data:

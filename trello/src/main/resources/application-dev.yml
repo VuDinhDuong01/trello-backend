@@ -20,9 +20,9 @@ spring:
         password:  dfan jlkt dtry yayv
     minio:
         url: http://127.0.0.1:9000
-        access-key: your-access-key
-        secret-key: your-secret-key
-        bucket-name: testbucket
+        access-key: IQSK6A3jbImJysjuxIE0
+        secret-key: 3x3c4FFnhtwVgblWk1wGTh2Of0oJAIT00ulaf78A
+        bucket-name: trello-bucket
     jwt:
         secretKey_access_token: Gd7Jf9vZsPiZhvQ5l3X8mYvR6P8jTv1L2xQ6jYuTzWvR5dMfH2k7gQ==
         secretKey_refresh_token: Gd8Jf9vZsPiZhvQ5l3X8mYvR6P8jTv1L2xQ6jYuTzWvR5dMfH2k7gQ==

@@ -1,8 +1,30 @@
 package com.example.trello.Service;
 
-import org.springframework.stereotype.Service;
+import java.io.IOException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import com.example.trello.Util.Util;
+
+import io.minio.GetPresignedObjectUrlArgs;
 import io.minio.MinioClient;
+import io.minio.PutObjectArgs;
+import io.minio.errors.ErrorResponseException;
+import io.minio.errors.InsufficientDataException;
+import io.minio.errors.InternalException;
+import io.minio.errors.InvalidResponseException;
+import io.minio.errors.ServerException;
+import io.minio.errors.XmlParserException;
+import io.minio.http.Method;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -11,5 +33,60 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RequiredArgsConstructor
 public class MinioService {
+
+    // @Value("${spring.minio.bucket-name}")
+    // String bucketName;
+
     MinioClient minioClient;
+
+    public Object upload(MultipartFile[] files) {
+        String userId = Util.getIdByToken();
+        Arrays.asList(files).stream().forEach(file -> {
+            String fileName = userId + "/" + file.getOriginalFilename();
+            try {
+                minioClient.putObject(PutObjectArgs.builder()
+                        .bucket("trello-bucket")
+                        .object("hihis/" + fileName)
+                        .stream(file.getInputStream(), file.getSize(), -1)
+                        .contentType(file.getContentType())
+                        .build());
+            } catch (InvalidKeyException | ErrorResponseException | InsufficientDataException | InternalException
+                    | InvalidResponseException | NoSuchAlgorithmException | ServerException | XmlParserException
+                    | IllegalArgumentException | IOException e) {
+                e.printStackTrace();
+            }
+        });
+
+        return null;
+        // try {
+
+        // minioClient.putObject(PutObjectArgs.builder()
+        // .bucket("trello-bucket") // Bucket lưu trữ
+        // .object(fileName) // Tên tệp phai de so nhieu
+        // .stream(file.getInputStream(), file.getSize(), -1) // Nội dung tệp
+        // .contentType(file.getContentType()) // Loại tệp
+        // .build());
+        // } catch (InvalidKeyException | ErrorResponseException |
+        // InsufficientDataException | InternalException
+        // | InvalidResponseException | NoSuchAlgorithmException | ServerException |
+        // XmlParserException
+        // | IllegalArgumentException | IOException e) {
+        // e.printStackTrace();
+        // }
+        // try {
+        // String url = minioClient.getPresignedObjectUrl(
+        // GetPresignedObjectUrlArgs.builder().bucket("trello-bucket").method(Method.GET).expiry(3600)
+        // .object(fileName)
+        // .extraQueryParams(Map.of("response-content-type", "image/jpg")).build());
+        // return url;
+        // } catch (InvalidKeyException | ErrorResponseException |
+        // InsufficientDataException | InternalException
+        // | InvalidResponseException | NoSuchAlgorithmException | XmlParserException |
+        // ServerException
+        // | IllegalArgumentException | IOException e) {
+        // e.printStackTrace();
+        // }
+        // return null;
+    }
+
 }

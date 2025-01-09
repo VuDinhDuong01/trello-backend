@@ -35,5 +35,11 @@ public class UserRequest {
         String email;
     }
 
+    @Getter
+    public static class UpdateMe{
+        String avatar;
+        String username;
+    }
+
     
 }

@@ -3,8 +3,12 @@ package com.example.trello.Service;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 
 import com.example.trello.Dto.Request.UserRequest;
@@ -109,7 +113,7 @@ public class UserService {
         user.setCreatedBy(null);
         user.setIsActive(true);
         user.setPassword(passwordEncoder.encode(payload.getPassword()));
-
+        user.setUsername(payload.getUsername());
         userRepository.save(user);
 
         UserResponse.Register register = new UserResponse.Register();
@@ -151,5 +155,21 @@ public class UserService {
         return response;
     }
 
-    
+    public UserEntity getMe() {
+        String userId = Util.getIdByToken();
+        UserEntity user = userRepository.findById(UUID.fromString(userId)).orElse(null);
+        return user;
+    }
+
+    public UserEntity updateMe(UserRequest.UpdateMe payload) {
+        String userId = Util.getIdByToken();
+        UserEntity user = userRepository.findById(UUID.fromString(userId)).orElse(null);
+
+        user.setAvatar(payload.getAvatar());
+        user.setUsername(payload.getUsername());
+        user.setUpdatedAt(new Date());
+        user.setUpdatedBy(UUID.fromString(userId));
+
+        return user;
+    }
 }

@@ -5,6 +5,7 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -39,17 +40,26 @@ public class MinioService {
 
     MinioClient minioClient;
 
-    public Object upload(MultipartFile[] files) {
+    public List<Map<String, Object>> upload(MultipartFile[] files) {
         String userId = Util.getIdByToken();
+        Map<String, Object> mapImage = new HashMap<>();
+        List<Map<String, Object>> listMapImage = new ArrayList<>();
         Arrays.asList(files).stream().forEach(file -> {
-            String fileName = userId + "/" + file.getOriginalFilename();
+            String fileName = userId + "/images/" + file.getOriginalFilename();
             try {
                 minioClient.putObject(PutObjectArgs.builder()
                         .bucket("trello-bucket")
-                        .object("hihis/" + fileName)
+                        .object(fileName)
                         .stream(file.getInputStream(), file.getSize(), -1)
                         .contentType(file.getContentType())
                         .build());
+                String url = minioClient.getPresignedObjectUrl(
+                        GetPresignedObjectUrlArgs.builder().bucket("trello-bucket").method(Method.GET).expiry(3600)
+                                .object(fileName)
+                                .extraQueryParams(Map.of("response-content-type", "image/jpg")).build());
+                mapImage.put("url", url);
+                mapImage.put("type", "image");
+                listMapImage.add(mapImage);
             } catch (InvalidKeyException | ErrorResponseException | InsufficientDataException | InternalException
                     | InvalidResponseException | NoSuchAlgorithmException | ServerException | XmlParserException
                     | IllegalArgumentException | IOException e) {
@@ -57,36 +67,7 @@ public class MinioService {
             }
         });
 
-        return null;
-        // try {
-
-        // minioClient.putObject(PutObjectArgs.builder()
-        // .bucket("trello-bucket") // Bucket lưu trữ
-        // .object(fileName) // Tên tệp phai de so nhieu
-        // .stream(file.getInputStream(), file.getSize(), -1) // Nội dung tệp
-        // .contentType(file.getContentType()) // Loại tệp
-        // .build());
-        // } catch (InvalidKeyException | ErrorResponseException |
-        // InsufficientDataException | InternalException
-        // | InvalidResponseException | NoSuchAlgorithmException | ServerException |
-        // XmlParserException
-        // | IllegalArgumentException | IOException e) {
-        // e.printStackTrace();
-        // }
-        // try {
-        // String url = minioClient.getPresignedObjectUrl(
-        // GetPresignedObjectUrlArgs.builder().bucket("trello-bucket").method(Method.GET).expiry(3600)
-        // .object(fileName)
-        // .extraQueryParams(Map.of("response-content-type", "image/jpg")).build());
-        // return url;
-        // } catch (InvalidKeyException | ErrorResponseException |
-        // InsufficientDataException | InternalException
-        // | InvalidResponseException | NoSuchAlgorithmException | XmlParserException |
-        // ServerException
-        // | IllegalArgumentException | IOException e) {
-        // e.printStackTrace();
-        // }
-        // return null;
+        return listMapImage;
     }
 
 }

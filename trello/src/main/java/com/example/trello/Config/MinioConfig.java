@@ -18,16 +18,14 @@ public class MinioConfig {
     @Value("${spring.minio.secret-key}")
     private String minioSecretKey;
 
-    @Value("${spring.minio.bucket-name}")
-    private String minioBucketName;
 
     @Bean
     public MinioClient minioClient() {
         return MinioClient.builder()
-                .endpoint(minioUrl)
+                .endpoint("http://127.0.0.1:9000")
                 .credentials(
-                        minioAccessKey, 
-                        minioSecretKey)
+                        "NYsyuwMBS6n50mtHFgbk", 
+                        "HtEXtnd8Sfay4SdRLjnJMTq9fExvjglS8wfGM1bd")
                 .build();
     }
 }

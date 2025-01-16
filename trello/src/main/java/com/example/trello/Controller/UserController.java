@@ -95,9 +95,26 @@ public class UserController {
 
     @ModuleDescriptionApi(module = "user", description = "lấy thông tin cá nhân", method = "GET", name = "", path = "/api/v1/me", matadataAdmin = false, type = "PRIVATE")
     @PatchMapping("/me")
-    public BaseResponse<UserEntity> updateMe(@RequestBody @Valid UserRequest.UpdateMe body){
-        UserEntity response =  userService.updateMe(body);
+    public BaseResponse<UserEntity> updateMe(@RequestBody @Valid UserRequest.UpdateMe body) {
+        UserEntity response = userService.updateMe(body);
         BaseResponse<UserEntity> result = BaseResponse.<UserEntity>builder().data(response).build();
         return result;
     }
+
+    @ModuleDescriptionApi(module = "user", description = "Đăng xuất", method = "POST", name = "", path = "/api/v1/logout", matadataAdmin = false, type = "PRIVATE")
+    @PostMapping("/logout")
+    public BaseResponse<String> logout(@RequestBody @Valid UserRequest.Logout body) {
+        String response = userService.logout(body);
+        BaseResponse<String> result = BaseResponse.<String>builder().data(response).build();
+        return result;
+    }
+
+    @ModuleDescriptionApi(module = "user", description = "Cấp lại token", method = "POST", name = "", path = "/api/v1/refresh-token", matadataAdmin = false, type = "PRIVATE")
+    @PostMapping("/refresh-token")
+    public BaseResponse<Map<String, String>> refreshToken(@RequestBody @Valid UserRequest.Logout body) {
+        Map<String, String> response = userService.refreshToken(body);
+        BaseResponse<Map<String, String>> result = BaseResponse.<Map<String, String>>builder().data(response).build();
+        return result;
+    }
+
 }

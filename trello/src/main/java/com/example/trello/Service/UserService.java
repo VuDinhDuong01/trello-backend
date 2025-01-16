@@ -5,16 +5,15 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 
 import com.example.trello.Dto.Request.UserRequest;
 import com.example.trello.Dto.Response.UserResponse;
+import com.example.trello.Entity.TokenEntity;
 import com.example.trello.Entity.UserEntity;
 import com.example.trello.Exception.ForbiddenErrorException;
+import com.example.trello.Repository.TokenRepository;
 import com.example.trello.Repository.UserRepository;
 import com.example.trello.Util.Util;
 
@@ -39,6 +38,7 @@ public class UserService {
     EmailService emailService;
     PasswordEncoder passwordEncoder;
     JwtService jwtService;
+    TokenRepository tokenRepository;
 
     public UserResponse.VerifyEmail VerifyEmail(UserRequest.VerifyEmail payload) {
         UserEntity user = userRepository.findByEmail(payload.getEmail());
@@ -138,15 +138,21 @@ public class UserService {
         }
 
         String accessToken = jwtService.generateToken(user.getId().toString(),
-                "Gd7Jf9vZsPiZhvQ5l3X8mYvR6P8jTv1L2xQ6jYuTzWvR5dMfH2k7gQ==");
+                "Gd7Jf9vZsPiZhvQ5l3X8mYvR6P8jTv1L2xQ6jYuTzWvR5dMfH2k7gQ==", 1000 * 60 * 60);
         String refreshToken = jwtService.generateToken(user.getId().toString(),
-                "Gd8Jf9vZsPiZhvQ5l3X8mYvR6P8jTv1L2xQ6jYuTzWvR5dMfH2k7gQ==");
+                "Gd8Jf9vZsPiZhvQ5l3X8mYvR6P8jTv1L2xQ6jYuTzWvR5dMfH2k7gQ==", 1000 * 60 * 60);
 
         Map<String, Object> response = new HashMap<>();
 
         UserResponse.Token token = new UserResponse.Token();
         token.setAccessToken(accessToken);
         token.setRefreshToken(refreshToken);
+
+        TokenEntity tokenEntity = new TokenEntity();
+        tokenEntity.setToken(refreshToken);
+        tokenEntity.setCreatedAt(new Date());
+        tokenEntity.setCreatedBy(user.getId());
+        tokenRepository.save(tokenEntity);
 
         response.put("record", user);
         response.put("token", token);
@@ -170,5 +176,31 @@ public class UserService {
         user.setUpdatedBy(UUID.fromString(userId));
 
         return user;
+    }
+
+    public String logout(UserRequest.Logout payload) {
+        TokenEntity findToken = tokenRepository.findByToken(payload.getRefresh_token());
+        if (findToken == null) {
+            throw new ForbiddenErrorException("token not exist");
+        }
+        tokenRepository.deleteByToken(payload.getRefresh_token());
+
+        return "logout success";
+    }
+
+    public Map<String, String> refreshToken(UserRequest.Logout payload) {
+        TokenEntity findToken = tokenRepository.findByToken(payload.getRefresh_token());
+        if (findToken == null) {
+            throw new ForbiddenErrorException("token not exist");
+        }
+        String userId = jwtService.extractUserId(payload.getRefresh_token(),
+                "Gd8Jf9vZsPiZhvQ5l3X8mYvR6P8jTv1L2xQ6jYuTzWvR5dMfH2k7gQ==");
+        String accessToken = jwtService.generateToken(userId,
+                "Gd7Jf9vZsPiZhvQ5l3X8mYvR6P8jTv1L2xQ6jYuTzWvR5dMfH2k7gQ==", 1000 * 60 * 60);
+
+        Map<String, String> mapToken = new HashMap<>();
+        mapToken.put("access_token", accessToken);
+        mapToken.put("refresh_token", payload.getRefresh_token());
+        return mapToken;
     }
 }

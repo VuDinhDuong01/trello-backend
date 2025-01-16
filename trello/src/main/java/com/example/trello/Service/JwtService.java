@@ -19,18 +19,18 @@ import lombok.Data;
 // @FieldDefaults(level = AccessLevel.PRIVATE)
 public class JwtService {
 
-    public String generateToken(String userId, String secret) {
+    public String generateToken(String userId, String secret, Integer expri) {
         Map<String, Object> claims = new HashMap<>();
-        return createToken(claims, userId, secret);
+        return createToken(claims, userId, secret, expri);
     }
 
     // Create a JWT token with specified claims and subject (user name)
-    String createToken(Map<String, Object> claims, String userId, String secret) {
+    String createToken(Map<String, Object> claims, String userId, String secret , Integer expri) {
         return Jwts.builder()
                 .setClaims(claims)
                 .setSubject(userId)
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 30))
+                .setExpiration(new Date(System.currentTimeMillis() + expri))
                 .signWith(getSignKey(secret), io.jsonwebtoken.SignatureAlgorithm.HS256)
                 .compact();
     }
@@ -41,7 +41,7 @@ public class JwtService {
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
-    String extractUsername(String token, String secret) {
+    String extractUserId(String token, String secret) {
         return extractClaim(token, secret, Claims::getSubject);
     }
 

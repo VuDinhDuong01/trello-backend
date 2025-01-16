@@ -41,5 +41,10 @@ public class UserRequest {
         String username;
     }
 
+    @Getter
+    public static class Logout{
+        String refresh_token;
+    }
+
     
 }

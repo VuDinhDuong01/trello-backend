@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -18,26 +20,32 @@ import com.example.trello.Repository.UserRepository;
 import com.example.trello.Util.Util;
 
 import lombok.AccessLevel;
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
 @Service
-@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@FieldDefaults(level = AccessLevel.PRIVATE)
+@Data
 @RequiredArgsConstructor
 public class UserService {
-    // @Value("${spring.jwt.secretKey_access_token}")
-    // String secret_access_key;
+    @Value("${spring.jwt.secretKey_access_token}")
+    String secret_access_key;
 
-    // @Value("${spring.jwt.secretKey_refresh_token}")
-    // String secret_refresh_key;
-    // @Value("${spring.mail.host}")
-    // String host;
+    @Value("${spring.jwt.secretKey_refresh_token}")
+    String secret_refresh_key;
 
+    @Autowired
     UserRepository userRepository;
+    @Autowired
     RedisService redisService;
+    @Autowired
     EmailService emailService;
+    @Autowired
     PasswordEncoder passwordEncoder;
+    @Autowired
     JwtService jwtService;
+    @Autowired
     TokenRepository tokenRepository;
 
     public UserResponse.VerifyEmail VerifyEmail(UserRequest.VerifyEmail payload) {
@@ -68,7 +76,6 @@ public class UserService {
         }
 
         Object token = redisService.getValueFromRedis(payload.getEmail() + "_register");
-        System.out.println("token:" + token);
 
         if (token == null) {
             throw new ForbiddenErrorException("Token đã hết hạn");
@@ -138,9 +145,9 @@ public class UserService {
         }
 
         String accessToken = jwtService.generateToken(user.getId().toString(),
-                "Gd7Jf9vZsPiZhvQ5l3X8mYvR6P8jTv1L2xQ6jYuTzWvR5dMfH2k7gQ==", 1000 * 60 * 60);
+                secret_access_key, 1000 * 60 * 60);
         String refreshToken = jwtService.generateToken(user.getId().toString(),
-                "Gd8Jf9vZsPiZhvQ5l3X8mYvR6P8jTv1L2xQ6jYuTzWvR5dMfH2k7gQ==", 1000 * 60 * 60);
+                secret_refresh_key, 1000 * 60 * 60);
 
         Map<String, Object> response = new HashMap<>();
 
@@ -190,13 +197,14 @@ public class UserService {
 
     public Map<String, String> refreshToken(UserRequest.Logout payload) {
         TokenEntity findToken = tokenRepository.findByToken(payload.getRefresh_token());
+
         if (findToken == null) {
             throw new ForbiddenErrorException("token not exist");
         }
         String userId = jwtService.extractUserId(payload.getRefresh_token(),
-                "Gd8Jf9vZsPiZhvQ5l3X8mYvR6P8jTv1L2xQ6jYuTzWvR5dMfH2k7gQ==");
+                secret_refresh_key);
         String accessToken = jwtService.generateToken(userId,
-                "Gd7Jf9vZsPiZhvQ5l3X8mYvR6P8jTv1L2xQ6jYuTzWvR5dMfH2k7gQ==", 1000 * 60 * 60);
+                secret_access_key, 1000 * 60 * 60);
 
         Map<String, String> mapToken = new HashMap<>();
         mapToken.put("access_token", accessToken);

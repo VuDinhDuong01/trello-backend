@@ -1,3 +1,29 @@
+
 spring:
-    profiles:
-        active: dev
+    datasource:
+        url: jdbc:mysql://localhost:3306/trello?allowPublicKeyRetrieval=true&useSSL=false
+        password: root  
+        username: root
+    jpa:
+        hibernate:            
+            show-sql: true
+            ddl-auto: update
+            dialect: org.hibernate.dialect.MySQLDialect
+    redis:
+        host: localhost
+        port: 6379
+    mail:
+        host: smtp.gmail.com
+        port: 587
+        fromEmail: duong2lophot@gmail.com
+        password:  clcu rtau qvsz kjpl
+    minio:
+        url: http://127.0.0.1:9000
+        access-key: cYSU2ex0AvVXWwzmfzag
+        secret-key: TZE299Vut6sP8IsSKI4n8B0GkvhpGioELe00wiJP
+        bucket-name: trello-bucket
+    jwt:
+        secretKey_access_token: Gd7Jf9vZsPiZhvQ5l3X8mYvR6P8jTv1L2xQ6jYuTzWvR5dMfH2k7gQ==
+        secretKey_refresh_token: Gd8Jf9vZsPiZhvQ5l3X8mYvR6P8jTv1L2xQ6jYuTzWvR5dMfH2k7gQ==
+server:
+    port: 5000

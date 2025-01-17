@@ -9,9 +9,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -34,10 +31,11 @@ import lombok.experimental.FieldDefaults;
 @Service
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RequiredArgsConstructor
-public class MinioService {
+public class MinioService 
+{
 
-    @Value("${spring.minio.bucket-name}")
-    String bucketName;
+    // @Value("${spring.minio.bucket-name}")
+    // String bucketName;
 
     MinioClient minioClient;
 
@@ -56,7 +54,7 @@ public class MinioService {
                         .build());
                 String url = minioClient.getPresignedObjectUrl(
                         GetPresignedObjectUrlArgs.builder().bucket(
-                                bucketName).method(Method.GET).expiry(3600)
+                                "bucket-trello").method(Method.GET).expiry(3600)
                                 .object(fileName)
                                 .extraQueryParams(Map.of("response-content-type", "image/jpg")).build());
                 mapImage.put("url", url);

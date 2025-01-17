@@ -11,29 +11,18 @@ import jakarta.persistence.Table;
 import lombok.Data;
 
 @Entity
-@Table(name = "board")
+@Table(name = "column")
 @Data
-public class BoardEntity extends BaseEntity {
-
+public class ColumnEntity extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     UUID id;
 
-    String description;
+    UUID boardId;
 
     String title;
 
-    List<UUID> ownerIds;
+    List<UUID> cardOrders;
 
-    List<UUID> memberIds;
-
-    List<UUID> columnOrders;
-
-    String status = "ACTIVE";
-
-    String avatar;
-
-    String type = "PUBLIC";
-
-
+    String status ="ACTIVE";
 }

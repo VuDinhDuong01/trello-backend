@@ -8,32 +8,33 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.AccessLevel;
 import lombok.Data;
+import lombok.experimental.FieldDefaults;
 
 @Entity
-@Table(name = "board")
 @Data
-public class BoardEntity extends BaseEntity {
+@FieldDefaults(level = AccessLevel.PRIVATE)
+@Table(name = "card")
+public class CardEntity extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     UUID id;
 
-    String description;
+    UUID boardId;
+
+    UUID columnId;
 
     String title;
-
-    List<UUID> ownerIds;
-
+    
     List<UUID> memberIds;
 
-    List<UUID> columnOrders;
+    String image;
 
-    String status = "ACTIVE";
+    String attached;
 
-    String avatar;
+    String status ="ACTIVE";
 
-    String type = "PUBLIC";
-
-
+    List<UUID> commentIds;
 }

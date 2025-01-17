@@ -19,7 +19,7 @@ public class BaseEntity {
     Boolean isDelete = false;
 
     @Column(name = "created_at")
-    Date createdAt;
+    Date createdAt = new Date();
 
     @Column(name = "updated_at")
     Date updatedAt;

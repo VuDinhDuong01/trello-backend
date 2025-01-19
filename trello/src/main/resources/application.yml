@@ -16,7 +16,7 @@ spring:
         host: smtp.gmail.com
         port: 587
         fromEmail: duong2lophot@gmail.com
-        password:  clcu rtau qvsz kjpl
+        password:  qnms tljn vttb xzsh
     minio:
         url: http://127.0.0.1:9000
         access-key: cYSU2ex0AvVXWwzmfzag

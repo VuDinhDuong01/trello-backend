@@ -37,8 +37,8 @@ public class UserService {
 
     @Autowired
     UserRepository userRepository;
-    @Autowired
-    RedisService redisService;
+    // @Autowired
+    // RedisService redisService;
     @Autowired
     EmailService emailService;
     @Autowired
@@ -55,9 +55,10 @@ public class UserService {
         }
         String subject = "";
         String token = Util.randomToken();
-        redisService.saveValueToRedis(payload.getEmail() + "_register", token);
-        Object tokenRedis = redisService.getValueFromRedis(payload.getEmail() + "_register");
-        // emailService.sendNewMail(payload.getEmail(), subject, token);
+        // redisService.saveValueToRedis(payload.getEmail() + "_register", token);
+        emailService.sendNewMail(payload.getEmail(), subject, token);
+        // Object tokenRedis = redisService.getValueFromRedis(payload.getEmail() + "_register");
+        
 
         UserResponse.VerifyEmail verifyEmail = new UserResponse.VerifyEmail();
         UserEntity userEntity = new UserEntity();
@@ -75,17 +76,17 @@ public class UserService {
             throw new ForbiddenErrorException("user not existed");
         }
 
-        Object token = redisService.getValueFromRedis(payload.getEmail() + "_register");
+        // Object token = redisService.getValueFromRedis(payload.getEmail() + "_register");
 
-        if (token == null) {
-            throw new ForbiddenErrorException("Token đã hết hạn");
-        }
+        // if (token == null) {
+        //     throw new ForbiddenErrorException("Token đã hết hạn");
+        // }
 
-        if (!token.equals(payload.getToken())) {
-            throw new ForbiddenErrorException("Token bạn nhập chưa đúng");
-        }
+        // if (!token.equals(payload.getToken())) {
+        //     throw new ForbiddenErrorException("Token bạn nhập chưa đúng");
+        // }
 
-        redisService.deleteValue(payload.getEmail() + "_register");
+        // redisService.deleteValue(payload.getEmail() + "_register");
         UserResponse.VerifyToken verifyToken = new UserResponse.VerifyToken();
         verifyToken.setEmail(payload.getEmail());
 
@@ -100,9 +101,9 @@ public class UserService {
 
         String subject = "";
         String token = Util.randomToken();
-        redisService.saveValueToRedis(payload.getEmail() + "_register", token);
-        Object tokenRedis = redisService.getValueFromRedis(payload.getEmail() + "_register");
-        System.out.println("tokenRedis:" + tokenRedis);
+        // redisService.saveValueToRedis(payload.getEmail() + "_register", token);
+        // Object tokenRedis = redisService.getValueFromRedis(payload.getEmail() + "_register");
+        // System.out.println("tokenRedis:" + tokenRedis);
         emailService.sendNewMail(payload.getEmail(), subject, token);
 
         return "Token đã được giửi về gmail của bạn.";

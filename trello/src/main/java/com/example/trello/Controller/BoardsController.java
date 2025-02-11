@@ -3,6 +3,7 @@ package com.example.trello.Controller;
 import java.util.Map;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,7 +23,7 @@ import lombok.experimental.FieldDefaults;
 
 @Controller
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v1/")
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class BoardsController {
@@ -38,7 +39,7 @@ public class BoardsController {
     }
 
     @ModuleDescriptionApi(module = "board", method = "DELETE", description = "Xóa board", name = "", path = "/api/v1/board", matadataAdmin = false, type = "PRIVATE")
-    @PostMapping("board")
+    @DeleteMapping("board")
     public BaseResponse<String> deleteBoard(@RequestBody @Valid BoardRequest.deleteBoard body) {
         String response = boardService.deleteBoard(body);
         BaseResponse<String> result = BaseResponse.<String>builder().data(response)

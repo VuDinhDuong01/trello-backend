@@ -11,7 +11,7 @@ import jakarta.persistence.Table;
 import lombok.Data;
 
 @Entity
-@Table(name = "column")
+@Table(name = "column-trello")
 @Data
 public class ColumnEntity extends BaseEntity {
     @Id

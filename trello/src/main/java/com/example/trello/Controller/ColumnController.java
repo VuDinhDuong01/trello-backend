@@ -3,6 +3,7 @@ package com.example.trello.Controller;
 import java.util.Map;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -41,7 +42,7 @@ public class ColumnController {
     }
 
     @ModuleDescriptionApi(module = "column", method = "DELETE", description = "Xóa cột", name = "", path = "/api/v1/column", matadataAdmin = false, type = "PRIVATE")
-    @PostMapping("board")
+    @DeleteMapping("column")
     public BaseResponse<String> deleteBoard(@RequestBody @Valid ColumnRequest.deleteColumn body) {
         String response = columnService.deleteColumn(body);
         BaseResponse<String> result = BaseResponse.<String>builder().data(response)
@@ -50,7 +51,7 @@ public class ColumnController {
     }
 
     @ModuleDescriptionApi(module = "column", method = "GET", description = "lấy column", name = "", path = "/api/v1/column", matadataAdmin = false, type = "PRIVATE")
-    @GetMapping("board")
+    @GetMapping("column")
     public BaseResponse<Map<String, Object>> getAllBoard(@RequestBody @Valid ColumnRequest.getColumn body) {
         Map<String, Object> response = columnService.getColumn(body);
         BaseResponse<Map<String, Object>> result = BaseResponse.<Map<String, Object>>builder().data(response)

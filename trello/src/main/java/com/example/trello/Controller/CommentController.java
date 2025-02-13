@@ -8,9 +8,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.trello.Dto.Request.CommentRequest;
 import com.example.trello.Dto.Response.BaseResponse;
+import com.example.trello.Dto.Validator.ModuleDescriptionApi;
 import com.example.trello.Entity.CommentEntity;
 import com.example.trello.Service.CommentService;
-import com.example.trello.Util.CustomValidation.ModuleDescriptionApi;
 
 import jakarta.validation.Valid;
 import lombok.AccessLevel;

@@ -13,10 +13,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.trello.Dto.Request.BoardRequest;
 import com.example.trello.Dto.Request.ColumnRequest;
 import com.example.trello.Dto.Response.BaseResponse;
+import com.example.trello.Dto.Validator.ModuleDescriptionApi;
 import com.example.trello.Entity.BoardEntity;
 import com.example.trello.Entity.ColumnEntity;
 import com.example.trello.Service.ColumnService;
-import com.example.trello.Util.CustomValidation.ModuleDescriptionApi;
 
 import jakarta.validation.Valid;
 import lombok.AccessLevel;

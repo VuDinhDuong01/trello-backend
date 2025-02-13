@@ -3,6 +3,7 @@ package com.example.trello.Entity;
 import java.util.List;
 import java.util.UUID;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -21,6 +22,7 @@ public class CommentEntity extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.UUID)
     UUID id;
 
+    @Column(name = "user_id")
     UUID userId;
 
     String content;
@@ -29,8 +31,10 @@ public class CommentEntity extends BaseEntity {
 
     String attached;
 
+    @Column(name = "card_id")
     UUID cardId;
 
+    @Column(name = "columnId")
     UUID columnId;
 
     String status = "ACTIVE";

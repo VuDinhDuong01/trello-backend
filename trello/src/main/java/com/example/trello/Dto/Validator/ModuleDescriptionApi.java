@@ -1,4 +1,4 @@
-package com.example.trello.Util.CustomValidation;
+package com.example.trello.Dto.Validator;
 
 import java.lang.annotation.Documented;
 @Documented

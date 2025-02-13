@@ -103,7 +103,6 @@ public class BoardService {
             for (BoardRequest.condition condition : payload.getConditions()) {
                 Path<String> key = root.get(condition.getKey());
                 List<Object> valueCondition = condition.getValue();
-                System.out.println("key:" + key);
 
                 // date
                 if (date.contains(key)) {

@@ -17,6 +17,7 @@ import com.example.trello.Entity.UserEntity;
 import com.example.trello.Exception.ForbiddenErrorException;
 import com.example.trello.Repository.TokenRepository;
 import com.example.trello.Repository.UserRepository;
+import com.example.trello.Service.impl.UserServiceImpl;
 import com.example.trello.Util.Util;
 
 import lombok.AccessLevel;
@@ -28,7 +29,7 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Data
 @RequiredArgsConstructor
-public class UserService {
+public class UserService implements UserServiceImpl {
     @Value("${spring.jwt.secretKey_access_token}")
     String secret_access_key;
 
@@ -48,6 +49,7 @@ public class UserService {
     @Autowired
     TokenRepository tokenRepository;
 
+    @Override
     public UserResponse.VerifyEmail VerifyEmail(UserRequest.VerifyEmail payload) {
         UserEntity user = userRepository.findByEmail(payload.getEmail());
         if (user != null) {
@@ -57,8 +59,8 @@ public class UserService {
         String token = Util.randomToken();
         // redisService.saveValueToRedis(payload.getEmail() + "_register", token);
         emailService.sendNewMail(payload.getEmail(), subject, token);
-        // Object tokenRedis = redisService.getValueFromRedis(payload.getEmail() + "_register");
-        
+        // Object tokenRedis = redisService.getValueFromRedis(payload.getEmail() +
+        // "_register");
 
         UserResponse.VerifyEmail verifyEmail = new UserResponse.VerifyEmail();
         UserEntity userEntity = new UserEntity();
@@ -69,6 +71,7 @@ public class UserService {
         return verifyEmail;
     }
 
+    @Override
     public UserResponse.VerifyToken VerifyToken(UserRequest.VerifyToken payload) {
 
         UserEntity user = userRepository.findByEmail(payload.getEmail());
@@ -76,14 +79,15 @@ public class UserService {
             throw new ForbiddenErrorException("user not existed");
         }
 
-        // Object token = redisService.getValueFromRedis(payload.getEmail() + "_register");
+        // Object token = redisService.getValueFromRedis(payload.getEmail() +
+        // "_register");
 
         // if (token == null) {
-        //     throw new ForbiddenErrorException("Token đã hết hạn");
+        // throw new ForbiddenErrorException("Token đã hết hạn");
         // }
 
         // if (!token.equals(payload.getToken())) {
-        //     throw new ForbiddenErrorException("Token bạn nhập chưa đúng");
+        // throw new ForbiddenErrorException("Token bạn nhập chưa đúng");
         // }
 
         // redisService.deleteValue(payload.getEmail() + "_register");
@@ -102,7 +106,8 @@ public class UserService {
         String subject = "";
         String token = Util.randomToken();
         // redisService.saveValueToRedis(payload.getEmail() + "_register", token);
-        // Object tokenRedis = redisService.getValueFromRedis(payload.getEmail() + "_register");
+        // Object tokenRedis = redisService.getValueFromRedis(payload.getEmail() +
+        // "_register");
         // System.out.println("tokenRedis:" + tokenRedis);
         emailService.sendNewMail(payload.getEmail(), subject, token);
 

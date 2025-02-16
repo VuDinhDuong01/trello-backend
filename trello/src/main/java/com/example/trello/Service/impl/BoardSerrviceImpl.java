@@ -42,11 +42,12 @@ public class BoardSerrviceImpl implements BoardService {
 
         BoardEntity boardEntity = new BoardEntity();
         boardEntity.setTitle(payload.getTitle());
-        boardEntity.setDescription(payload.getDescription());
+    
         boardEntity.setStatus(payload.getStatus());
-        boardEntity.setAvatar(payload.getAvatar());
+
         boardEntity.setCreatedBy(UUID.fromString(userId));
-        boardEntity.setType(payload.getType());
+        boardEntity.setBackground(payload.getBackground());
+        boardEntity.setPermissionViewer(payload.getPermissionViewer());
 
         List<UUID> ownerIds = new ArrayList<>();
         List<UUID> memberIds = new ArrayList<>();

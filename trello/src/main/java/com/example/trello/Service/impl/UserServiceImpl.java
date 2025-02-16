@@ -32,7 +32,7 @@ import lombok.experimental.FieldDefaults;
 @Data
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
- @Value("${spring.jwt.secretKey_access_token}")
+    @Value("${spring.jwt.secretKey_access_token}")
     String secret_access_key;
 
     @Value("${spring.jwt.secretKey_refresh_token}")
@@ -195,6 +195,7 @@ public class UserServiceImpl implements UserService {
 
     public String logout(UserRequest.Logout payload) {
         TokenEntity findToken = tokenRepository.findByToken(payload.getRefresh_token());
+        System.out.println("token" + findToken);
         if (findToken == null) {
             throw new ForbiddenErrorException("token not exist");
         }
@@ -219,5 +220,5 @@ public class UserServiceImpl implements UserService {
         mapToken.put("refresh_token", payload.getRefresh_token());
         return mapToken;
     }
-    
+
 }

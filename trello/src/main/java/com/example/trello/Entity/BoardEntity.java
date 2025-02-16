@@ -20,8 +20,6 @@ public class BoardEntity extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.UUID)
     UUID id;
 
-    String description;
-
     String title;
 
     @Column(name = "owner_ids")
@@ -35,9 +33,8 @@ public class BoardEntity extends BaseEntity {
 
     String status = "ACTIVE";
 
-    String avatar;
-
-    String type = "PUBLIC";
-
+    String background;
+    @Column(name = "permission_viewer")
+    String permissionViewer;
 
 }

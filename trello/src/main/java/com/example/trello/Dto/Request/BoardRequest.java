@@ -17,11 +17,10 @@ public class BoardRequest {
         String title;
         List<UUID> ownerIds;
         List<UUID> memberIds;
-        String status;
-        String avatar;
-        String type;
-        String description;
+        String permissionViewer;
+        String background;
         List<UUID> columnOrders;
+        String status;
     }
 
     @Getter

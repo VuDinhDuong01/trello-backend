@@ -47,8 +47,8 @@ public class BoardsController {
         return result;
     }
 
-    @ModuleDescriptionApi(module = "board", method = "GET", description = "lấy board", name = "", path = "/api/v1/board", matadataAdmin = false, type = "PRIVATE")
-    @GetMapping("board")
+    @ModuleDescriptionApi(module = "board", method = "POST", description = "lấy board", name = "", path = "/api/v1/board", matadataAdmin = false, type = "PRIVATE")
+    @PostMapping("board/filter")
     public BaseResponse<Map<String, Object>> getAllBoard(@RequestBody @Valid BoardRequest.getBoard body) {
         Map<String, Object> response = boardService.getBoard(body);
         BaseResponse<Map<String, Object>> result = BaseResponse.<Map<String, Object>>builder().data(response)

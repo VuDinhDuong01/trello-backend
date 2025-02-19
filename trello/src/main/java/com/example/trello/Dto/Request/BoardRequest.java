@@ -44,4 +44,8 @@ public class BoardRequest {
         String key;
         List<Object> value;
     }
+    @Getter 
+    public static class getDetail{
+        String id;
+    }
 }

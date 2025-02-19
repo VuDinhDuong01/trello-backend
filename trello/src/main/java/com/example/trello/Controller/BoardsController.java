@@ -5,6 +5,7 @@ import java.util.Map;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -52,6 +53,15 @@ public class BoardsController {
     public BaseResponse<Map<String, Object>> getAllBoard(@RequestBody @Valid BoardRequest.getBoard body) {
         Map<String, Object> response = boardService.getBoard(body);
         BaseResponse<Map<String, Object>> result = BaseResponse.<Map<String, Object>>builder().data(response)
+                .build();
+        return result;
+    }
+
+    @ModuleDescriptionApi(module = "board", method = "GET", description = "lấy detail board", name = "", path = "/api/v1/board/:id", matadataAdmin = false, type = "PRIVATE")
+    @GetMapping("board/{id}")
+    public BaseResponse<BoardEntity> getDetail(@PathVariable @Valid BoardRequest.getDetail params) {
+        BoardEntity response = boardService.getDetailBoard(params);
+        BaseResponse<BoardEntity> result = BaseResponse.<BoardEntity>builder().data(response)
                 .build();
         return result;
     }

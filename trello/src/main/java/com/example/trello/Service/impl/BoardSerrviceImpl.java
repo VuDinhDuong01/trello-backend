@@ -42,7 +42,7 @@ public class BoardSerrviceImpl implements BoardService {
 
         BoardEntity boardEntity = new BoardEntity();
         boardEntity.setTitle(payload.getTitle());
-    
+
         boardEntity.setStatus(payload.getStatus());
 
         boardEntity.setCreatedBy(UUID.fromString(userId));
@@ -144,5 +144,13 @@ public class BoardSerrviceImpl implements BoardService {
 
     private Sort sort(String sortField, String sortType) {
         return sortType == "asc" ? Sort.by(sortField).ascending() : Sort.by(sortField).descending();
+    }
+
+    public BoardEntity getDetailBoard(BoardRequest.getDetail payload) {
+        BoardEntity findBoard = boardRepository.findById(UUID.fromString(payload.getId())).orElse(null);
+        if (findBoard == null) {
+            throw new ForbiddenErrorException("Board không tồn tại");
+        }
+        return findBoard;
     }
 }

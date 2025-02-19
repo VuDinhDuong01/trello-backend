@@ -10,5 +10,6 @@ public interface BoardService {
     abstract BoardEntity createBoard(BoardRequest.createBoard payload);
     abstract String deleteBoard(BoardRequest.deleteBoard payload);
     abstract Map<String, Object> getBoard(BoardRequest.getBoard payload);
+    abstract BoardEntity getDetailBoard(BoardRequest.getDetail payload);
    
 }

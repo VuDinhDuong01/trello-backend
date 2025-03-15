@@ -3,6 +3,7 @@ package com.example.trello.Dto.Request;
 import java.util.List;
 import java.util.UUID;
 
+import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Getter;
@@ -14,6 +15,7 @@ public class BoardRequest {
 
     @Getter
     public static class createBoard {
+        @Size(min = 3, message = "USERNAME_INVALID")
         String title;
         List<UUID> ownerIds;
         List<UUID> memberIds;

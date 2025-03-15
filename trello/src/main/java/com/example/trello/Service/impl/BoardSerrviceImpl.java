@@ -20,9 +20,11 @@ import org.springframework.stereotype.Service;
 
 import com.example.trello.Dto.Request.BoardRequest;
 import com.example.trello.Entity.BoardEntity;
+import com.example.trello.Exception.AppException;
 import com.example.trello.Exception.ForbiddenErrorException;
 import com.example.trello.Repository.BoardRepository;
 import com.example.trello.Service.BoardService;
+import com.example.trello.Util.ErrorCode;
 import com.example.trello.Util.Util;
 
 import jakarta.persistence.criteria.Path;
@@ -68,7 +70,7 @@ public class BoardSerrviceImpl implements BoardService {
         String userId = Util.getIdByToken();
         BoardEntity findBoard = boardRepository.findById(UUID.fromString(payload.getId())).orElse(null);
         if (findBoard == null) {
-            throw new ForbiddenErrorException("Board không tồn tại");
+            throw new AppException(ErrorCode.USER_EXISTED);
         }
 
         BoardEntity boardEntity = new BoardEntity();

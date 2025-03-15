@@ -17,6 +17,7 @@ import lombok.Data;
 import lombok.experimental.FieldDefaults;
 
 @Data
+// biết nó là baseEntity
 @MappedSuperclass
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class BaseEntity {

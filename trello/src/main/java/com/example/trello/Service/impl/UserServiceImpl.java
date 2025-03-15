@@ -15,6 +15,7 @@ import com.example.trello.Dto.Response.UserResponse;
 import com.example.trello.Entity.TokenEntity;
 import com.example.trello.Entity.UserEntity;
 import com.example.trello.Exception.ForbiddenErrorException;
+import com.example.trello.Mapper.UserMapper;
 import com.example.trello.Repository.TokenRepository;
 import com.example.trello.Repository.UserRepository;
 import com.example.trello.Service.EmailService;
@@ -50,6 +51,9 @@ public class UserServiceImpl implements UserService {
     JwtService jwtService;
     @Autowired
     TokenRepository tokenRepository;
+
+    @Autowired
+    UserMapper userMapper;
 
     @Override
     public UserResponse.VerifyEmail VerifyEmail(UserRequest.VerifyEmail payload) {
@@ -121,14 +125,15 @@ public class UserServiceImpl implements UserService {
         if (user == null) {
             throw new ForbiddenErrorException("user not exist");
         }
-        user.setEmail(payload.getEmail());
-        user.setCreatedAt(new Date());
-        user.setIsActive(true);
-        user.setCreatedBy(null);
-        user.setIsActive(true);
-        user.setPassword(passwordEncoder.encode(payload.getPassword()));
-        user.setUsername(payload.getUsername());
-        userRepository.save(user);
+        UserEntity userMapperRequest = userMapper.toUser(payload);
+        // user.setEmail(payload.getEmail());
+        userMapperRequest.setCreatedAt(new Date());
+        userMapperRequest.setIsActive(true);
+        userMapperRequest.setCreatedBy(null);
+        userMapperRequest.setIsActive(true);
+        userMapperRequest.setPassword(passwordEncoder.encode(payload.getPassword()));
+        // user.setUsername(payload.getUsername());
+        userRepository.save(userMapperRequest);
 
         UserResponse.Register register = new UserResponse.Register();
         register.setMessage("register success");

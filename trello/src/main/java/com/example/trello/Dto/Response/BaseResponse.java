@@ -1,13 +1,18 @@
 package com.example.trello.Dto.Response;
 
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
 @Data
+// data chỉ tạo constructor khi field k phải là notnull hoặc final
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
+@AllArgsConstructor
+@NoArgsConstructor
 public class BaseResponse<T> {
     T data;
 
@@ -23,5 +28,4 @@ public class BaseResponse<T> {
         Integer code;
         String message;
     }
-
 }

@@ -20,10 +20,15 @@ import lombok.experimental.FieldDefaults;
 @Controller
 @RestController
 @RequestMapping("/api/v1/")
-@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-@RequiredArgsConstructor
+// @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+// @RequiredArgsConstructor
 public class CardController {
-    CardService cardService;
+    
+   private final  CardService cardService;
+
+   public CardController(CardService cardService){
+    this.cardService = cardService;
+   }
 
     @ModuleDescriptionApi(module = "card", method = "POST", description = "Tạo hàng", name = "", path = "/api/v1/card", matadataAdmin = false, type = "PRIVATE")
     @PostMapping("card")

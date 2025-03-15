@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
+import com.example.trello.Config.CORSConfig;
 import com.example.trello.Dto.Request.BoardRequest;
 import com.example.trello.Dto.Response.BaseResponse;
 import com.example.trello.Dto.Validator.ModuleDescriptionApi;
@@ -28,15 +28,22 @@ import lombok.experimental.FieldDefaults;
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class BoardsController {
+
     BoardService boardService;
 
     @ModuleDescriptionApi(module = "board", method = "POST", description = "Tạo board", name = "", path = "/api/v1/board", matadataAdmin = false, type = "PRIVATE")
     @PostMapping("board")
     public BaseResponse<BoardEntity> createBoard(@RequestBody @Valid BoardRequest.createBoard body) {
-        BoardEntity response = boardService.createBoard(body);
-        BaseResponse<BoardEntity> result = BaseResponse.<BoardEntity>builder().data(response)
-                .build();
-        return result;
+        BoardEntity response;
+        try {
+            response = boardService.createBoard(body);
+            BaseResponse<BoardEntity> result = BaseResponse.<BoardEntity>builder().data(response)
+                    .build();
+            return result;
+        } catch (Exception ex) {
+            return "abd";
+        }
+
     }
 
     @ModuleDescriptionApi(module = "board", method = "DELETE", description = "Xóa board", name = "", path = "/api/v1/board", matadataAdmin = false, type = "PRIVATE")

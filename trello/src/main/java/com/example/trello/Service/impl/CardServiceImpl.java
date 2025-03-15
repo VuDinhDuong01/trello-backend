@@ -24,7 +24,7 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RequiredArgsConstructor
 public class CardServiceImpl  implements CardService{
-     CardRepository cardRepository;
+    CardRepository cardRepository;
     ColumnRepository columnRepository;
 
     public CardEntity createCard(CardRequest.createCard payload) {
